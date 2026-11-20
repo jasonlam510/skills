@@ -1,6 +1,6 @@
 ---
 name: commit
-description: Plan logical commit units from all working tree changes (staged, unstaged and untracked), suggest Conventional Commits titles, and create commits only after approval of the plan. Use when the user asks to commit changes or plan/split commits.
+description: Plan logical commit units from all working tree changes (staged, unstaged and untracked), suggest Conventional Commits titles, and create commits only after approval of the plan. Also use when merging a pull request, to write the merge commit message. Use when the user asks to commit changes, plan/split commits, or merge a PR.
 ---
 
 # Commit Planning and Splitting
@@ -103,6 +103,31 @@ First run `git reset` (keeps the working tree) so only each unit's files are sta
 - Print `git log --oneline -<N>` for the new commits
 - Confirm working tree is clean or list what's left uncommitted
 
+### Merging a pull request
+
+Never keep GitHub's default merge message ("Merge pull request #N from …").
+The merge commit follows the same Commit Rules as any other commit.
+
+1. Read the PR's commits and linked issue (`gh pr view <N> --json title,commits,closingIssuesReferences`).
+2. Build the message:
+   - Title: Conventional Commits title for the PR as a whole, scope from `### Scopes`, no PR number in the title
+     (e.g. `feat(dashboard): validate collector payloads and settings with pydantic`)
+   - Body (optional): one bullet per commit in the PR
+   - Footer: `refs: #<issue>` (same footer rule as commits), then `pr: #<N>` on its own line
+3. Show the message and wait for approval, like a commit plan.
+4. Merge with the message: `gh pr merge <N> --merge --subject "<title>" --body "<body + footers>"`
+   Keep the merge method the user or repo asks for; with `--rebase` there is no merge commit, so skip this section.
+
+Example:
+
+    feat(dashboard): validate collector payloads and settings with pydantic
+
+    - chore: add pydantic agent skill
+    - feat(dashboard): validate collector payloads and settings with pydantic
+
+    refs: #69
+    pr: #71
+
 ## Commit message format
 
 Follow the [Conventional Commits 1.0.0](references/conventional-commits-1.0.0.md) specification:
@@ -129,6 +154,7 @@ Follow the [Conventional Commits 1.0.0](references/conventional-commits-1.0.0.md
 - **Dependency order**: Foundations and shared code before features that use them.
 - **UI and its dependencies**: Always group UI components with their specific styling and translation files.
 - **Same footer everywhere**: If the user specifies a footer, add it to every new commit in this run.
+- **Merge commits follow the rules too**: Never use GitHub's default "Merge pull request" message; write it as a Conventional Commit with the `refs:` issue footer and a `pr:` footer.
 - **Project commit rules**: Read only the `## Commit Rules` block from the repository root `AGENT.md`. If its `### Scopes` rules are absent or incomplete, ask the user and persist their answer in that block before planning.
 - **Skip unrelated paths**: Do not commit untracked tooling unless the user asks.
 - **Repo root**: Run `git` from the repository root.
