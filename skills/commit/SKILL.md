@@ -114,8 +114,7 @@ The merge commit follows the same Commit Rules as any other commit.
      (e.g. `feat(dashboard): validate collector payloads and settings with pydantic`)
    - Body (optional): one bullet per commit in the PR
    - Footer: `refs: #<issue>` (same footer rule as commits), then `pr: #<N>` on its own line
-3. Show the message and wait for approval, like a commit plan.
-4. Merge with the message: `gh pr merge <N> --merge --subject "<title>" --body "<body + footers>"`
+3. Merge with the message: `gh pr merge <N> --merge --subject "<title>" --body "<body + footers>"`
    Keep the merge method the user or repo asks for; with `--rebase` there is no merge commit, so skip this section.
 
 Example:
