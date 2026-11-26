@@ -12,7 +12,7 @@ When the user wants to commit changes, plan logical units from the **working tre
 - **On the commit/plan command**: If scope rules must be clarified, ask only for that clarification and stop. Otherwise, return **only the plan** (units, titles, files, footer). Do **not** run `git add` or `git commit`. Stop after showing the plan.
 - **Commits require approval**: Run `git add` / `git commit` **only** when the user has sent an **approval signal** in a later message.
 - **Approval signals**: Treat as approval and then create the commits when the user says things like: "ok", "please commit", "go ahead", "approved", "yes", "do it", "execute", or equivalent.
-- **Flow**: First reply = scope clarification when required, otherwise plan + "Reply with 'ok' or 'please commit' to create these commits." After any required clarification, write the user's scope rules to the `## Commit Rules` block in `AGENT.md`, show the plan, and wait for a separate approval signal. After the user replies with an approval signal, create the commits and report.
+- **Flow**: First reply = scope clarification when required, otherwise plan + "Reply with 'ok' or 'please commit' to create these commits." After any required clarification, write the user's scope rules to the `## Commit Rules` block in `AGENTS.md`, show the plan, and wait for a separate approval signal. After the user replies with an approval signal, create the commits and report.
 
 ## When to Apply
 
@@ -28,7 +28,7 @@ When the user wants to commit changes, plan logical units from the **working tre
 
 - Consider all working tree changes regardless of staging. If the user names specific files, limit the plan to those.
 - Run `git status --short` and `git diff HEAD --stat` to see all changes; read the diffs needed to group them.
-- From the repository root `AGENT.md`, read only the `## Commit Rules` block (from that heading to the next `##` heading or end of file). Follow the commit convention and `### Scopes` rules in that block; do not read unrelated sections or infer project-specific scopes from memory.
+- From the repository root `AGENTS.md`, read only the `## Commit Rules` block (from that heading to the next `##` heading or end of file). Follow the commit convention and `### Scopes` rules in that block; do not read unrelated sections or infer project-specific scopes from memory.
 - The expected structure is:
 
   ```markdown
@@ -40,7 +40,7 @@ When the user wants to commit changes, plan logical units from the **working tre
   - Omit scope when: ...
   ```
 
-- If `AGENT.md`, `## Commit Rules`, or `### Scopes` is missing, or the scope convention is incomplete, ask the user for the missing rules and stop. After the user answers, create or update that block, include `AGENT.md` in the commit plan, and then continue planning.
+- If `AGENTS.md`, `## Commit Rules`, or `### Scopes` is missing, or the scope convention is incomplete, ask the user for the missing rules and stop. After the user answers, create or update that block, include `AGENTS.md` in the commit plan, and then continue planning.
 - Leave out files that look accidental or local-only (secrets such as `.env`, build output, editor or tool state) and list them as excluded in the plan. If there are no changes, report that and stop.
 - A file holding changes for several units can be split with `git add -p` in Phase B; say so in the plan.
 
@@ -63,7 +63,7 @@ Group the changed files into **commit units** in **dependency order** (things th
 #### 3. Suggest commit title per unit
 
 - **Title**: Follow the [Conventional Commits 1.0.0](references/conventional-commits-1.0.0.md) specification (e.g. `feat: add validation helper`, `fix: user login error`).
-- **Scope**: Use the convention and allowed scope names from `AGENT.md` → `## Commit Rules` → `### Scopes`. If they are not documented, ask the user and record the answer in that block; do not choose or infer scopes. Apply the documented rules for when a scope should be omitted.
+- **Scope**: Use the convention and allowed scope names from `AGENTS.md` → `## Commit Rules` → `### Scopes`. If they are not documented, ask the user and record the answer in that block; do not choose or infer scopes. Apply the documented rules for when a scope should be omitted.
 - **Body** (optional): Bullet points for non-trivial units
 - **Footer**: If the user gave one (e.g. `refs: EPS-811, #1327`), use the same footer on every commit
 
@@ -154,6 +154,6 @@ Follow the [Conventional Commits 1.0.0](references/conventional-commits-1.0.0.md
 - **UI and its dependencies**: Always group UI components with their specific styling and translation files.
 - **Same footer everywhere**: If the user specifies a footer, add it to every new commit in this run.
 - **Merge commits follow the rules too**: Never use GitHub's default "Merge pull request" message; write it as a Conventional Commit with the `refs:` issue footer and a `pr:` footer.
-- **Project commit rules**: Read only the `## Commit Rules` block from the repository root `AGENT.md`. If its `### Scopes` rules are absent or incomplete, ask the user and persist their answer in that block before planning.
+- **Project commit rules**: Read only the `## Commit Rules` block from the repository root `AGENTS.md`. If its `### Scopes` rules are absent or incomplete, ask the user and persist their answer in that block before planning.
 - **Skip unrelated paths**: Do not commit untracked tooling unless the user asks.
 - **Repo root**: Run `git` from the repository root.
